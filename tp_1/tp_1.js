@@ -1,0 +1,74 @@
+/*
+comisión 2
+Joaquin Natanael Montiel 
+legajo: 122802/5
+*/
+//https://www.youtube.com/watch?v=W8_FF-ZVp9A
+
+let img;
+let animar = false;
+let desplazamiento = 0;
+let direccion = 1;
+let cantidad = 0;
+
+
+
+function preload() {
+  img = loadImage("./data/1000088935.jpg");
+}
+
+function setup() {
+  createCanvas(800, 400);
+}
+
+function draw() {
+  background(255);
+  image(img, 0, 0, width / 2, height);
+
+  for (let x = width / 2 + 25; x < width; x += 50) {
+    for (let y = 25; y < height; y += 50) {
+      let cantidad = 5;
+      dibujarHipnosis(x, y, cantidad);
+    }
+  }
+
+  if (animar) {
+    desplazamiento += direccion * 0.2;
+    if (desplazamiento > 5 || desplazamiento < 0) {
+      direccion *= -1;
+    }
+  }
+}
+
+function keyPressed() {
+  if (key === 'a') {
+    animar = !animar;
+  } else if (key === 'r') {
+    animar = false;
+    desplazamiento = 0;
+    direccion = 1;
+    cantidad = 0;
+  }
+}
+
+function dibujarHipnosis(cx, cy, cantidad) {
+  let tamMax = (cantidad - 1) * 13 + desplazamiento;
+
+  // Si se hace clic sobre el círculo más grande
+  if (mouseIsPressed && estaSobreCirculo(mouseX, mouseY, cx, cy, tamMax / 2)) {
+    fill(200, 150, 235);
+    ellipse(cx, cy, tamMax, tamMax);
+  }
+
+  // Dibujar círculos encima
+  for (let i = 0; i < cantidad; i++) {
+    let tam = i * 13 + desplazamiento;
+    strokeWeight(3);
+    noFill();
+    ellipse(cx, cy, tam, tam);
+  }
+}
+
+function estaSobreCirculo(x, y, cx, cy, radio) {
+  return dist(x, y, cx, cy) < radio;
+}
